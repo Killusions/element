@@ -1,0 +1,18 @@
+{
+  "name": "mkdocs-simpl-docs-composer",
+  "private": true,
+  "description": "MkDocs plugin for the SiMPL MarkDown documentation files to auto-generate, compose and enrich them with additional content.",
+  "version": "1.0.0",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "git@code.siemens.com:simpl/simpl-docs-composer.git"
+  },
+  "author": {
+    "name": "Siemens AG",
+    "email": "info@siemens.com"
+  },
+  "homepage": "https://code.siemens.com/simpl/simpl-docs-composer",
+  "bugs": "https://code.siemens.com/simpl/simpl-docs-composer/issues"
+}

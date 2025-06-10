@@ -1,5 +1,5 @@
 import typescriptEslint from 'typescript-eslint';
-import { tsConfig, templateConfig } from '../../eslint.config.js';
+import { tsConfig, templateConfig } from '../../eslint.config.mjs';
 
 export default typescriptEslint.config(
   {
