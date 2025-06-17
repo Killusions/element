@@ -1,0 +1,18 @@
+{
+  "name": "mkdocs-element-docs-composer",
+  "private": true,
+  "description": "MkDocs plugin for the Element MarkDown documentation files to auto-generate, compose and enrich them with additional content.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/siemens/element.git"
+  },
+  "author": {
+    "name": "Siemens AG",
+    "email": "info@siemens.com"
+  },
+  "homepage": "https://element.siemens.io",
+  "bugs": "https://github.com/siemens/element"
+}
