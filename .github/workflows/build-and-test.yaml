@@ -158,8 +158,16 @@ jobs:
         with:
           name: dist
           path: dist
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/jod
+          cache: 'npm'
+      - run: npm config set //code.siemens.com/api/v4/packages/npm/:_authToken $SIEMENS_NPM_TOKEN
+        env:
+          SIEMENS_NPM_TOKEN: ${{ secrets.SIEMENS_NPM_TOKEN }}
+      - run: npm ci --prefer-offline --no-audit --include=optional
       - run: cp dist/element-examples/favicon.png docs/_src/favicon.png
-      - run: uv run mkdocs build
+      - run: npm run docs:build:generate
         env:
           UV_INDEX_CODE_DOCS_THEME_USERNAME: ${{ secrets.SIEMENS_NPM_USER }}
           UV_INDEX_CODE_DOCS_THEME_PASSWORD: ${{ secrets.SIEMENS_NPM_TOKEN }}
@@ -172,4 +180,3 @@ jobs:
 # TODO: add release job
 # TODO: build PR previews
 # TODO: e2e test
-
