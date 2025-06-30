@@ -43,7 +43,11 @@
     "translate:test": "ng test element-translate-ng",
     "translate:build": "ng build element-translate-ng && cpy LICENSE.md \"./dist/@siemens/element-translate-ng/\"",
     "docs:build": "uv run mkdocs build --strict",
+    "docs:build:api": "cross-env DOCS_COMPOSER=true uv run mkdocs build --strict",
+    "docs:build:generate": "cross-env DOCS_COMPOSER=true DOCS_COMPOSER_GENERATE=true DOCS_COMPOSER_OPTIONS='{ \"outputDir\": \"docs-out\" }' uv run mkdocs build --strict",
     "docs:serve": "uv run mkdocs serve",
+    "docs:serve:api": "cross-env DOCS_COMPOSER=true uv run mkdocs serve",
+    "docs:serve:generate": "cross-env DOCS_COMPOSER=true DOCS_COMPOSER_GENERATE=true DOCS_COMPOSER_OPTIONS='{ \"outputDir\": \"docs-out\" }' uv run mkdocs serve",
     "live-preview:build": "ng build live-preview",
     "prepare": "husky; exit 0",
     "prepare-brand": "cpy --flat node_modules/@simpl/brand/src/favicon/sie-favicon_internet_64px.png docs/_src --rename=favicon.png && cpy --flat node_modules/@simpl/brand/src/favicon/sie-favicon_internet_64px.png src --rename=favicon.png",
@@ -96,6 +100,7 @@
     "@siemens/commitlint-config": "2.1.1",
     "@siemens/eslint-config-angular": "2.1.1",
     "@siemens/eslint-plugin-defaultvalue": "^2.1.1",
+    "@siemens/ngx-datatable": "^22.4.1",
     "@siemens/prettier-config": "2.1.1",
     "@siemens/stylelint-config-scss": "2.1.1",
     "@types/jasmine": "5.1.7",
@@ -135,6 +140,8 @@
   },
   "optionalDependencies": {
     "@simpl/brand": "^0.3.1",
-    "@simpl/element-icons": "^1.28.0"
+    "@simpl/docs-composer": "^11.11.3",
+    "@simpl/element-icons": "^1.28.0",
+    "cross-env": "^7.0.3"
   }
 }
