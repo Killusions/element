@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: MIT
  */
 import { Component, inject, input, viewChild } from '@angular/core';
-import { addIcons, SiIconComponent } from '@siemens/element-ng/icon';
 import { LOG_EVENT } from '@siemens/live-preview';
 import { MapPoint, MapPointMetaData, SiMapComponent } from '@siemens/maps-ng';
-import { elementGoTo } from '@simpl/element-icons/ionic';
 import { mockPoints, singlePoint } from 'src/app/mocks/points.mock';
 import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-custom-popover',
-  imports: [SiIconComponent],
   template: `
     <div style="max-block-size: 200px;">
       @for (point of mapPoints(); track $index) {
@@ -27,7 +24,7 @@ import { environment } from 'src/environments/environment';
             aria-label="Show details"
             (click)="pointClick(point)"
           >
-            <si-icon class="icon" [icon]="icons.elementGoTo" />
+            No
           </button>
         </div>
       }
@@ -36,7 +33,6 @@ import { environment } from 'src/environments/environment';
 })
 export class CustomClusterPopoverComponent {
   readonly logEvent = inject(LOG_EVENT);
-  readonly icons = addIcons({ elementGoTo });
   readonly mapPoints = input.required<MapPointMetaData[]>();
   protected pointClick(point: MapPointMetaData): void {
     this.logEvent('Clicked on point', point);
