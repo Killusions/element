@@ -1,31 +1,387 @@
 name: Publish Documentation
+
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      deploy_as_release:
+        description: 'Deploy as release version (e.g., v1.2.3) - will deploy the docs as if this is a release with this version'
+        required: false
+        type: string
+        default: ''
+  workflow_call:
+    inputs:
+      deploy_as_release:
+        description: 'Deploy as release version (e.g., v1.2.3) - will deploy the docs as if this is a release with this version'
+        required: false
+        type: string
+        default: ''
+      skip_build:
+        description: 'Skip build-and-test job (assumes artifacts already exist)'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  PYTHON_VERSION: '3.11'
+  NODE_VERSION: '20'
 
 jobs:
   build-and-test:
+    if: ${{ !inputs.skip_build }}
     uses: ./.github/workflows/build-and-test.yaml
     secrets:
       SIEMENS_NPM_TOKEN: ${{ secrets.SIEMENS_NPM_TOKEN }}
       SIEMENS_NPM_USER: ${{ secrets.SIEMENS_NPM_USER }}
       MAPTILER_KEY: ${{ secrets.MAPTILER_KEY }}
 
-  publish-documentation:
-    runs-on: ubuntu-24.04
-    permissions:
-      pages: write
-      id-token: write
+  determine-documentation-versions:
     needs:
       - build-and-test
+    if: ${{ always() && (needs.build-and-test.result == 'success' || inputs.skip_build) }}
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    runs-on: ubuntu-24.04
+    outputs:
+      deploy_latest: ${{ steps.deploy.outputs.deploy_latest }}
+      deploy_major: ${{ steps.deploy.outputs.deploy_major }}
+      deploy_preview: ${{ steps.deploy.outputs.deploy_preview }}
+      major_version: ${{ steps.deploy.outputs.major_version }}
+      version: ${{ steps.deploy.outputs.version }}
     steps:
-      - uses: actions/configure-pages@v5
-      - uses: actions/download-artifact@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine deployment targets
+        id: deploy
+        run: |
+          # Initialize all outputs
+          DEPLOY_LATEST="false"
+          DEPLOY_MAJOR="false"
+          DEPLOY_PREVIEW="false"
+          MAJOR_VERSION=""
+          VERSION=""
+
+          IS_MANUAL="${{ github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' }}"
+          IS_MAIN="${{ github.ref == 'refs/heads/main' }}"
+          DEPLOY_AS_RELEASE="${{ github.event.inputs.deploy_as_release || inputs.deploy_as_release }}"
+
+          # Validate manual version format if provided
+          if [[ ("$IS_MANUAL" == "true" || "${{ github.event_name }}" == "workflow_call") && -n "$DEPLOY_AS_RELEASE" ]]; then
+            # Ensure version starts with 'v'
+            if [[ ! "$DEPLOY_AS_RELEASE" =~ ^v[0-9]+\.[0-9]+\.[0-9]+.*$ ]]; then
+              echo "❌ Error: Deploy as release version must be in format 'v1.2.3' or 'v1.2.3-suffix'"
+              echo "   Provided: '$DEPLOY_AS_RELEASE'"
+              exit 1
+            fi
+            echo "✅ Deploy as release version format is valid: $DEPLOY_AS_RELEASE"
+          fi
+
+          # Extract version info if deploy_as_release is provided
+          if [[ ("$IS_MANUAL" == "true" || "${{ github.event_name }}" == "workflow_call") && -n "$DEPLOY_AS_RELEASE" ]]; then
+            VERSION="${DEPLOY_AS_RELEASE#v}"
+            MAJOR_VERSION="v$(echo "$VERSION" | cut -d. -f1)"
+
+            # Check if it's a pre-release (contains -, like v1.0.0-rc1)
+            IS_PRERELEASE="false"
+            if [[ "$VERSION" =~ -.*$ ]]; then
+              IS_PRERELEASE="true"
+            fi
+          fi
+
+          # 1. If on main, deploy "preview"
+          if [[ "$IS_MAIN" == "true" ]]; then
+            DEPLOY_PREVIEW="true"
+          fi
+
+          # 2. If manually triggered with deploy_as_release, deploy "<version>"
+          #    except for pre/next/rc releases
+          if [[ ("$IS_MANUAL" == "true" || "${{ github.event_name }}" == "workflow_call") && -n "$DEPLOY_AS_RELEASE" && "$IS_PRERELEASE" == "false" ]]; then
+            DEPLOY_MAJOR="true"
+
+            # 3. If we're on main, also deploy "latest"
+            if [[ "$IS_MAIN" == "true" ]]; then
+              DEPLOY_LATEST="true"
+            fi
+          fi
+
+          # Output results
+          echo "deploy_latest=$DEPLOY_LATEST" >> $GITHUB_OUTPUT
+          echo "deploy_major=$DEPLOY_MAJOR" >> $GITHUB_OUTPUT
+          echo "deploy_preview=$DEPLOY_PREVIEW" >> $GITHUB_OUTPUT
+          echo "major_version=$MAJOR_VERSION" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          # Debug output
+          echo "🚀 DEPLOYMENT PLAN"
+          echo "=================="
+          echo "Trigger: ${{ github.event_name }}"
+          echo "Ref: ${{ github.ref_name }}"
+          if [[ ("$IS_MANUAL" == "true" || "${{ github.event_name }}" == "workflow_call") && -n "$DEPLOY_AS_RELEASE" ]]; then
+            echo "Deploy as release: $DEPLOY_AS_RELEASE"
+          fi
+          echo ""
+          echo "Deployments:"
+          echo "  Latest: $DEPLOY_LATEST"
+          echo "  Major ($MAJOR_VERSION): $DEPLOY_MAJOR"
+          echo "  Preview: $DEPLOY_PREVIEW"
+          echo "  Version: $VERSION"
+
+      - name: Deployment Summary
+        run: |
+          echo "🚀 DEPLOYMENT SUMMARY"
+          echo "====================="
+          echo "Trigger: ${{ github.event_name }}"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" || "${{ github.event_name }}" == "workflow_call" ]]; then
+            DEPLOY_AS_RELEASE="${{ github.event.inputs.deploy_as_release || inputs.deploy_as_release }}"
+            if [[ -n "$DEPLOY_AS_RELEASE" ]]; then
+              echo "Deploy as release: $DEPLOY_AS_RELEASE"
+            else
+              echo "Manual trigger without version (preview only)"
+            fi
+          else
+            echo "Branch/Tag: ${{ github.ref_name }}"
+          fi
+          if [[ "$DEPLOY_LATEST" == "true" ]]; then
+            echo "✅ Will deploy to LATEST (root)"
+            echo "   URL: https://element.siemens.io/latest/ or https://element.siemens.io/"
+          fi
+          if [[ "$DEPLOY_MAJOR" == "true" ]]; then
+            echo "✅ Will deploy to MAJOR VERSION $MAJOR_VERSION"
+            echo "   URL: https://element.siemens.io/"
+          fi
+          if [[ "$DEPLOY_PREVIEW" == "true" ]]; then
+            echo "✅ Will deploy to PREVIEW"
+            echo "   URL: https://element.siemens.io/preview/"
+          fi
+
+          echo "====================="
+
+  publish-documentation:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-and-test
+      - determine-documentation-versions
+    if: ${{ always() && needs.determine-documentation-versions.result == 'success' }}
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download documentation artifact
+        uses: actions/download-artifact@v5
         with:
           name: pages
-          path: dist/design
-      - uses: actions/upload-pages-artifact@v4
+          path: new-docs
+
+      - name: Download existing site content from archive
+        run: |
+          REPO_OWNER=$(echo "${{ github.repository }}" | cut -d'/' -f1)
+          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
+          ARCHIVE_URL="https://${REPO_OWNER,,}.github.io/$REPO_NAME/documentation.tar.gz"
+
+          mkdir -p existing-site
+
+          echo "Attempting to download existing documentation archive from: $ARCHIVE_URL"
+
+          # Try to download existing documentation archive
+          if curl -s -f -L "$ARCHIVE_URL" -o existing-documentation.tar.gz; then
+            echo "Found existing documentation archive, extracting..."
+            cd existing-site
+            tar -xzf ../existing-documentation.tar.gz
+            cd ..
+            echo "Extracted existing site structure"
+
+            # Ensure versions.json exists
+            if [[ ! -f "existing-site/versions.json" ]]; then
+              echo "[]" > existing-site/versions.json
+            fi
+          else
+            echo "No existing documentation archive found, will create fresh deployment"
+            echo "[]" > existing-site/versions.json
+          fi
+        continue-on-error: true
+
+      - name: Prepare deployment
+        run: |
+          mkdir -p deploy-site
+
+          # Copy existing content first
+          if [[ -d existing-site ]]; then
+            cp -r existing-site/* deploy-site/ 2>/dev/null || true
+          fi
+
+          echo "Deployment preparation complete"
+
+      - name: Deploy to latest (root)
+        if: needs.determine-documentation-versions.outputs.deploy_latest == 'true'
+        run: |
+          echo "Deploying to latest (root)"
+
+          # Deploy to root and latest (preserve version subdirectories)
+          # Delete all files in root except versions.json
+          find deploy-site -maxdepth 1 -type f ! -name 'versions.json' -exec rm -f {} + 2>/dev/null || true
+          # Delete all version directories except v*, preview, latest
+          find deploy-site -maxdepth 1 -type d ! -name 'v*' ! -name 'preview' ! -name 'latest' ! -name 'deploy-site' -exec rm -rf {} + 2>/dev/null || true
+          rm -rf deploy-site/latest 2>/dev/null || true
+          mkdir -p deploy-site/latest
+          cp -r new-docs/* deploy-site/
+          cp -r new-docs/* deploy-site/latest/
+
+          echo "✅ Deployed to latest (root)"
+
+          # In root, replace "../versions.json" with "./versions.json" in the JS in assets/javascripts/*
+          find deploy-site -maxdepth 1 -name "*.html" -type f -exec sed -i.bak \
+            -e 's|"\.\./versions.json"|"/versions.json"|g' \
+            {} \;
+
+      - name: Deploy to major version
+        if: needs.determine-documentation-versions.outputs.deploy_major == 'true'
+        run: |
+          MAJOR_VERSION="${{ needs.determine-documentation-versions.outputs.major_version }}"
+          echo "Deploying to major version: $MAJOR_VERSION"
+
+          # Replace this major version directory
+          rm -rf "deploy-site/$MAJOR_VERSION"
+          mkdir -p "deploy-site/$MAJOR_VERSION"
+          cp -r new-docs/* "deploy-site/$MAJOR_VERSION/"
+
+          echo "✅ Deployed to $MAJOR_VERSION"
+
+      - name: Deploy to preview
+        if: needs.determine-documentation-versions.outputs.deploy_preview == 'true'
+        run: |
+          echo "Deploying to preview"
+
+          # Replace preview directory
+          rm -rf deploy-site/preview
+          mkdir -p deploy-site/preview
+          cp -r new-docs/* deploy-site/preview/
+
+          echo "✅ Deployed to preview"
+
+      - name: Ensure latest exists as fallback
+        run: |
+          # If no root content exists, use preview or new docs as default
+          if [[ ! -f "deploy-site/index.html" ]]; then
+            if [[ -d "deploy-site/preview" ]]; then
+              echo "Using preview as fallback for root"
+              cp -r deploy-site/preview/* deploy-site/
+            else
+              echo "Using new docs as fallback for root"
+              cp -r new-docs/* deploy-site/
+            fi
+          fi
+
+      - name: Generate dynamic versions.json
+        run: |
+          echo "Generating versions.json from discovered directories..."
+
+          # Start with latest
+          VERSIONS='[{"version": "", "title": "Latest", "aliases": ["latest"]}]'
+
+          # Add preview if it exists
+          if [[ -d "deploy-site/preview" ]]; then
+            VERSIONS=$(echo "$VERSIONS" | jq '. += [{"version": "preview", "title": "Preview", "aliases": []}]')
+          fi
+
+          # Add all version directories in descending order
+          for version_dir in $(ls -d deploy-site/v*/ 2>/dev/null | sort -Vr); do
+            if [[ -d "$version_dir" ]]; then
+              version_name=$(basename "$version_dir")
+              version_num=$(echo "$version_name" | sed 's/^v//')
+              VERSIONS=$(echo "$VERSIONS" | jq --arg version "$version_name" --arg title "v$version_num" '. += [{"version": $version, "title": $title, "aliases": []}]')
+            fi
+          done
+
+          # Read existing versions.json and merge with new versions
+          EXISTING_VERSIONS='[]'
+          if [[ -f "existing-site/versions.json" ]]; then
+            EXISTING_VERSIONS=$(cat existing-site/versions.json)
+            echo "Found existing versions.json:"
+            echo "$EXISTING_VERSIONS" | jq .
+          fi
+
+          # Merge existing versions with new ones, removing duplicates
+          MERGED_VERSIONS=$(echo "$EXISTING_VERSIONS $VERSIONS" | jq -s '
+            add |
+            unique_by(.version) |
+            sort_by(
+              if .version == "" then 0
+              elif .version == "preview" then 1
+              elif (.version | type) == "string" and (.version | test("^v[0-9]+")) then
+                (.version | ltrimstr("v") | split(".")[0] | tonumber) + 1000
+              else 9999 end
+            ) |
+            reverse
+          ')
+
+          # Write merged versions.json
+          echo "$MERGED_VERSIONS" > deploy-site/versions.json
+
+          echo "Generated merged versions.json:"
+          cat deploy-site/versions.json | jq .
+
+      - name: Update canonical URLs
+        run: |
+          REPO_OWNER=$(echo "${{ github.repository }}" | cut -d'/' -f1)
+          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
+          BASE_URL="https://${REPO_OWNER,,}.github.io/$REPO_NAME"
+
+          echo "Updating canonical URLs to: $BASE_URL"
+
+          # Update root canonical URLs
+          if [[ -f "deploy-site/index.html" ]]; then
+            find deploy-site -maxdepth 1 -name "*.html" -type f -exec sed -i.bak \
+              -e "s|<link rel=\"canonical\" href=\"[^\"]*\"|<link rel=\"canonical\" href=\"$BASE_URL|g" \
+              {} \;
+          fi
+
+          # Update subdirectory canonical URLs
+          for version_dir in deploy-site/*/; do
+            if [[ -d "$version_dir" ]]; then
+              version_name=$(basename "$version_dir")
+              VERSION_URL="$BASE_URL/$version_name"
+
+              find "$version_dir" -name "*.html" -type f -exec sed -i.bak \
+                -e "s|<link rel=\"canonical\" href=\"[^\"]*\"|<link rel=\"canonical\" href=\"$VERSION_URL|g" \
+                {} \;
+            fi
+          done
+
+          # Clean up backup files
+          find deploy-site -name "*.bak" -type f -delete 2>/dev/null || true
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Create documentation archive
+        run: |
+          echo "Creating documentation archive..."
+          cd deploy-site
+          tar -czf ../documentation.tar.gz .
+          cd ..
+
+          # Store archive at root of deployment
+          cp documentation.tar.gz deploy-site/
+
+          echo "Archive created and stored at root: documentation.tar.gz"
+          echo "Archive size: $(du -h documentation.tar.gz | cut -f1)"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: 'dist/design'
-      - uses: actions/deploy-pages@v4
+          path: 'deploy-site'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
