@@ -242,7 +242,7 @@ jobs:
 
           # In root, replace "../versions.json" with "./versions.json" in the JS in assets/javascripts/*
           find deploy-site -maxdepth 1 -name "*.html" -type f -exec sed -i.bak \
-            -e 's|"\.\./versions.json"|"/versions.json"|g' \
+            -e 's|"\.\./versions.json"|"versions.json"|g' \
             {} \;
 
       - name: Deploy to major version
