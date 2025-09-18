@@ -23,7 +23,7 @@
   - img "Buildings at scale"
   - text: /Project Issues! \d+ Issues Number of contributing issues/
   - link "Go to issues":
-    - /url: https://github.com/siemens/element/issues
+    - /url: https://github.com/Killusions/element/issues
   - text: Bar Chart
   - menubar:
     - menuitem "Print"
@@ -67,7 +67,7 @@
       - text: /6 St\. Basil's Cathedral \d+\.\d+/
       - button "Building overview"
   - link "Go to...":
-    - /url: https://github.com/siemens/element/issues
+    - /url: https://github.com/Killusions/element/issues
   - text: Timeline Widget
   - list:
     - listitem: /Today \d+:\d+ Title Description/
@@ -75,4 +75,4 @@
     - listitem: /Today \d+:\d+ Title Description/
     - listitem: /Today \d+:\d+ Title Description/
   - link "Go to...":
-    - /url: https://github.com/siemens/element/issues
+    - /url: https://github.com/Killusions/element/issues

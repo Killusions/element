@@ -66,7 +66,7 @@ Import the `SiPhotoUploadComponent` in your standalone component that shall prov
 
 ??? info "Required Packages"
     - [ngx-image-cropper](https://www.npmjs.com/package/ngx-image-cropper)
-    The currently supported dependency versions can be found in the [package.json of the demo app](https://github.com/siemens/element/blob/main/package.json).
+    The currently supported dependency versions can be found in the [package.json of the demo app](https://github.com/Killusions/element/blob/main/package.json).
 
 ```ts
 import { Component } from '@angular/core';

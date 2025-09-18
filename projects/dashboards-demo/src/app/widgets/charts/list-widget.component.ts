@@ -85,7 +85,7 @@ export class ListWidgetComponent implements WidgetInstance {
   ];
   @ViewChild('footer', { static: true }) footer?: TemplateRef<unknown>;
   primaryActions!: ContentActionBarMainItem[];
-  protected link?: Link = { href: 'https://github.com/siemens/element/issues' };
+  protected link?: Link = { href: 'https://github.com/Killusions/element/issues' };
 
   sort?: SortOrder;
 

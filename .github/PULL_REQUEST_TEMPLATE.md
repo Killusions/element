@@ -3,4 +3,4 @@
 
 ---
 
-- [ ] I confirm that this MR follows the [contribution guidelines](https://github.com/siemens/element/blob/main/CONTRIBUTING.md).
+- [ ] I confirm that this MR follows the [contribution guidelines](https://github.com/Killusions/element/blob/main/CONTRIBUTING.md).

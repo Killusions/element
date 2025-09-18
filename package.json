@@ -6,7 +6,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/siemens/element.git"
+    "url": "git+ssh://git@github.com/Killusions/element.git"
   },
   "author": {
     "name": "Siemens AG",
@@ -44,14 +44,15 @@
     "translate:test": "ng test element-translate-ng",
     "translate:build": "ng build element-translate-ng && cpy LICENSE.md \"./dist/@siemens/element-translate-ng/\"",
     "docs:build": "uv run mkdocs build --strict",
-    "docs:build:api": "cross-env DOCS_COMPOSER=true DOCS_COMPOSER_OPTIONS='{ \"structured\": true, \"structuredRemoveEncoded\": true }' uv run mkdocs build --strict",
-    "docs:build:generate": "cross-env DOCS_COMPOSER=true DOCS_COMPOSER_GENERATE=true DOCS_COMPOSER_OPTIONS='{ \"structured\": true, \"structuredRemoveEncoded\": true, \"structuredExcludeGenerated\": true }' uv run mkdocs build --strict",
+    "docs:build:api": "uv run mkdocs build --strict",
+    "docs:build:generate": "uv run mkdocs build --strict",
     "docs:serve": "uv run mkdocs serve",
-    "docs:serve:api": "cross-env DOCS_COMPOSER=true uv run mkdocs serve",
-    "docs:serve:generate": "cross-env DOCS_COMPOSER=true DOCS_COMPOSER_GENERATE=true uv run mkdocs serve",
+    "docs:serve:api": "uv run mkdocs serve",
+    "docs:serve:generate": "uv run mkdocs serve",
     "live-preview:build": "ng build live-preview && cpy LICENSE.md \"./dist/@siemens/live-preview/\"",
+    "release:dry-run": "cross-env CI_FORK=true npx semantic-release --dry-run",
     "prepare": "husky; exit 0",
-    "prepare-brand": "cpy --flat node_modules/@simpl/brand/assets/favicon/sie-favicon_internet_64px.png docs/_src --rename=favicon.png && cpy --flat node_modules/@simpl/brand/assets/favicon/sie-favicon_internet_64px.png src --rename=favicon.png && cpy --flat node_modules/@simpl/brand/assets/favicon/sie-favicon_internet_64px.png projects/dashboards-demo/src --rename=favicon.png && cpy --flat node_modules/@simpl/brand/assets/favicon/sie-favicon_internet_64px.png projects/dashboards-demo/mfe/src --rename=favicon.png",
+    "prepare-brand": "echo 'Skipping brand preparation - @simpl/brand not available'",
     "postversion": "npm run format",
     "charts:test": "ng test charts-ng",
     "charts:build": "ng build charts-ng && cpy \"{LICENSE.md,projects/charts-ng/README.md}\" \"./dist/@siemens/charts-ng/\"",
@@ -169,9 +170,6 @@
     "typescript-eslint": "8.44.0"
   },
   "optionalDependencies": {
-    "@simpl/brand": "^2.2.0",
-    "@simpl/docs-composer": "^11.16.2",
-    "@simpl/element-icons": "^1.28.0",
     "cross-env": "^10.0.0"
   }
 }

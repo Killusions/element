@@ -330,6 +330,6 @@ map tiles. This drastically reduces the amount of map requests to maptiler that 
 in our contract. And for testing you want to test your map functionality and not the map data.
 
 - **Unit tests:** Do simply **not** provide an API key during
-- **Playwright tests:** Stub the `tiles.json` request (and some others) using [page.route(...)](https://github.com/siemens/element/tree/main/playwright/e2e/element-examples/maps/static.spec.ts).
+- **Playwright tests:** Stub the `tiles.json` request (and some others) using [page.route(...)](https://github.com/Killusions/element/tree/main/playwright/e2e/element-examples/maps/static.spec.ts).
 
 <si-docs-types></si-docs-types>

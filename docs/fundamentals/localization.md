@@ -78,7 +78,7 @@ the `SiLocaleStore` to persist the new locale. After reloading the application, 
 the changed locale. As default, a localStorage implementation is used. You can implement your own store to load and
 persis the user preferred locale from a setting backend that is shared across applications.
 
-We implemented a [demo store](https://github.com/siemens/element/tree/main/src/app/examples/si-localization/demo-locale.service.ts)
+We implemented a [demo store](https://github.com/Killusions/element/tree/main/src/app/examples/si-localization/demo-locale.service.ts)
 that loads a locale from a backend before the angular application initializes. The store is configured in the providers of the main
 module definition. In the following you find the key code snippets.
 

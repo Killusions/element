@@ -85,10 +85,10 @@ When visual requirements do not align with the semantic hierarchy, the appropria
 (`h1`, `h2`, ... `h6`) should still be used, with the desired visual style applied through CSS classes.
 
 When the visual style of `h1` is too prominent for typical in-page headings,
-such as the [page header](https://github.com/siemens/element/fundamentals/layouts/header.md),
+such as the [page header](https://github.com/Killusions/element/fundamentals/layouts/header.md),
 the `h2` style is used instead for visual balance.
 
-In this pattern, the `h1` tag is assigned to the application name in the [application header](https://github.com/siemens/element/components/layout-navigation/application-header.md).
+In this pattern, the `h1` tag is assigned to the application name in the [application header](https://github.com/Killusions/element/components/layout-navigation/application-header.md).
 This preserves both visual hierarchy and correct semantic structure for assistive technologies.
 
 ![Headings accessibility semantics](images/typography-accesibility.png)
@@ -174,7 +174,7 @@ mapped to the related Bootstrap classes.
 All font-sizes, line-heights and font-weights are specified as SASS
 variables, which can be used if required. The variables come in the form of
 `$si-font-size-[name]`, `$si-line-height-[name]`, `$si-font-weight-[name]` and
-are defined in [_typography.scss](https://github.com/siemens/element/tree/main/projects/element-theme/src/styles/variables/_typography.scss).
+are defined in [_typography.scss](https://github.com/Killusions/element/tree/main/projects/element-theme/src/styles/variables/_typography.scss).
 
 ```scss
 @use '@siemens/element-theme/src/styles/variables';
@@ -212,7 +212,7 @@ color: variables.$element-status-danger-contrast;
 background-color: variables.$element-status-danger;
 ```
 
-See [_semantic-tokens](https://github.com/siemens/element/tree/main/projects/element-theme/src/styles/variables/_semantic-tokens.scss).
+See [_semantic-tokens](https://github.com/Killusions/element/tree/main/projects/element-theme/src/styles/variables/_semantic-tokens.scss).
 
 ### Bootstrap typography utilities
 
