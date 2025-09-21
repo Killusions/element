@@ -14,8 +14,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/siemens/element"
-Repository = "https://github.com/siemens/element.git"
+Homepage = "https://github.com/Killusions/element"
+Repository = "https://github.com/Killusions/element.git"
 Documentation = "https://element.siemens.io"
 
 [tool.hatch.build]

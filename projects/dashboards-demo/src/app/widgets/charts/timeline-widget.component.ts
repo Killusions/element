@@ -60,5 +60,5 @@ export class TimelineWidgetComponent implements WidgetInstance {
   ];
   @ViewChild('footer', { static: true }) footer?: TemplateRef<unknown>;
 
-  protected link?: Link = { href: 'https://github.com/siemens/element/issues' };
+  protected link?: Link = { href: 'https://github.com/Killusions/element/issues' };
 }

@@ -5,7 +5,7 @@ site_url: 'https://element.siemens.io/'
 site_dir: 'dist/design'
 
 repo_name: 'siemens/element'
-repo_url: 'https://github.com/siemens/element'
+repo_url: 'https://github.com/Killusions/element'
 edit_uri: 'blob/main/docs/'
 
 copyright: '&copy; Siemens 2016-2025'
@@ -179,26 +179,26 @@ nav:
   - Changelog:                            'CHANGELOG.md'
 
 theme:
-  name: code-siemens-code-docs-theme
+  name: material
   palette:
     - media: "(prefers-color-scheme: dark)"
-      scheme: dark
+      scheme: slate
       toggle:
-        icon: siemens/element/element-economy
+        icon: material/brightness-4
         name: Switch to light mode
     - media: "(prefers-color-scheme: light)"
-      scheme: light
+      scheme: default
       toggle:
-        icon: siemens/element/element-sun
-        name: Switch to system theme
-    - media: "(prefers-color-scheme)"
-      toggle:
-        icon: siemens/element/element-theme-auto
+        icon: material/brightness-7
         name: Switch to dark mode
   favicon: '_src/favicon.png'
   features:
     - navigation.tabs
-    - page.toc
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
     - content.action.edit
 
 extra_javascript:
@@ -208,10 +208,10 @@ extra_javascript:
 extra:
   links:
     - name: 'GitHub'
-      value: 'https://github.com/siemens/element'
+      value: 'https://github.com/Killusions/element'
     - name: 'Siemens Xcelerator Developer Portal'
       value: 'https://developer.siemens.com/'
-  page_license_text: Except where otherwise noted, content on this site is licensed under <a href="https://github.com/siemens/element/blob/main/LICENSE.md">MIT License</a>.
+  page_license_text: Except where otherwise noted, content on this site is licensed under <a href="https://github.com/Killusions/element/blob/main/LICENSE.md">MIT License</a>.
 
 markdown_extensions:
   - attr_list
@@ -220,7 +220,7 @@ markdown_extensions:
       linenums_style: pymdownx-inline
       guess_lang: true
   - pymdownx.emoji:
-      emoji_index: !!python/name:mkdocs_siemens.icons.twemoji
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.details
   - pymdownx.tasklist
@@ -229,12 +229,9 @@ markdown_extensions:
   - pymdownx.superfences
   - admonition
   - md_in_html
-  - element-docs:
-      examples_base: !ENV [ EXAMPLES_BASE, 'http://localhost:4200' ]
   - toc:
       permalink: true
 
 plugins:
-  - material/search
+  - search
   - minify_html
-  - element-docs-builder

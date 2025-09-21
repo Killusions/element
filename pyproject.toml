@@ -7,26 +7,20 @@ license = "MIT"
 requires-python = "~=3.11"
 readme = "README.md"
 dependencies = [
-    "mkdocs-code-siemens-code-docs-theme>=7.7.0,<8",
+    "mkdocs-material>=9.0.0,<10",
     "mkdocs-minify-html-plugin==0.3.4",
     "mkdocs-element-docs-builder",
 ]
 
 [project.urls]
 Homepage = "https://element.siemens.io"
-Repository = "https://github.com/siemens/element.git"
+Repository = "https://github.com/Killusions/element.git"
 Documentation = "https://element.siemens.io"
 
 [tool.uv]
 package = false
 
-[[tool.uv.index]]
-name = "code-docs-theme"
-url = "https://code.siemens.com/api/v4/groups/3259/-/packages/pypi/simple"
-explicit = true
-
 [tool.uv.sources]
-mkdocs-code-siemens-code-docs-theme = { index = "code-docs-theme" }
 mkdocs-element-docs-builder = { workspace = true }
 
 [build-system]

@@ -78,7 +78,7 @@ widget will be positioned upon letting it go.
 
 The Flexible Dashboards are based on [gridstack.js](http://gridstackjs.com).
 
-See [README](https://github.com/siemens/element/blob/main/projects/dashboards-ng/README.md) for details
+See [README](https://github.com/Killusions/element/blob/main/projects/dashboards-ng/README.md) for details
 about including to your app.
 
 <iframe class="component-preview" src="https://element.siemens.io/dashboards-demo/#/dashboard" height="991px" width="100%" allowfullscreen="true"></iframe>

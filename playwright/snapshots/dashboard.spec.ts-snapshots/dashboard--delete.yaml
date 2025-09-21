@@ -18,7 +18,7 @@
   - button "Toggle"
   - text: /\d+ Issues Number of contributing issues/
   - link "Go to issues":
-    - /url: https://github.com/siemens/element/issues
+    - /url: https://github.com/Killusions/element/issues
   - img
   - text: Bar Chart
   - menubar:
@@ -64,7 +64,7 @@
       - text: /6 St\. Basil's Cathedral \d+\.\d+/
       - button "Building overview"
   - link "Go to...":
-    - /url: https://github.com/siemens/element/issues
+    - /url: https://github.com/Killusions/element/issues
   - img
   - text: Timeline Widget
   - menubar:
@@ -75,4 +75,4 @@
     - listitem: /Today \d+:\d+ Title Description/
     - listitem: /Today \d+:\d+ Title Description/
   - link "Go to...":
-    - /url: https://github.com/siemens/element/issues
+    - /url: https://github.com/Killusions/element/issues

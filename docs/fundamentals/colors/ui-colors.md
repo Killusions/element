@@ -169,7 +169,7 @@ utility classes.
 
 Element extends the Bootstrap color utils with additional classes for Element
 specific colors. These classes are defined in the
-[_utilities](https://github.com/siemens/element/tree/main/projects/element-theme/src/styles/bootstrap/_utilities.scss) file.
+[_utilities](https://github.com/Killusions/element/tree/main/projects/element-theme/src/styles/bootstrap/_utilities.scss) file.
 
 Using contextual colors within SASS stylesheets is also possible by importing
 the Element Theme variables.

@@ -36,7 +36,7 @@ export class ValueWidgetComponent implements OnInit, WidgetInstance {
   readonly config = input.required<WidgetConfig>();
   protected valueWidgetValue?: { value: string; unit: string };
   @ViewChild('footer', { static: true }) footer?: TemplateRef<unknown>;
-  protected link?: Link = { href: 'https://github.com/siemens/element/issues' };
+  protected link?: Link = { href: 'https://github.com/Killusions/element/issues' };
 
   private dataService = inject(DataService);
   private destroyRef = inject(DestroyRef);

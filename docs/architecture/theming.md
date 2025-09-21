@@ -76,7 +76,7 @@ You need to provide your implementation in the main app module:
 It's also possible to use custom themes at build time. This option is mostly for OEM theming. To
 use a theme at build time, first set up a SCSS file with the theme definitions. These are a SCSS
 map. For the required keys, please see the the
-[Siemens Brand](https://github.com/siemens/element/tree/main/projects/element-theme/src/styles/variables/siemens-brand/_theme-siemens-brand.scss)
+[Siemens Brand](https://github.com/Killusions/element/tree/main/projects/element-theme/src/styles/variables/siemens-brand/_theme-siemens-brand.scss)
 definitions.
 
 For example, create `_theme-oem.scss` with this:

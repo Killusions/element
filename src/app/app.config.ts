@@ -134,7 +134,7 @@ export const APP_CONFIG: ApplicationConfig = {
           ],
           componentLoader,
           examplesBaseUrl: 'app/examples/',
-          ticketBaseUrl: 'https://github.com/siemens/element/issues/new',
+          ticketBaseUrl: 'https://github.com/Killusions/element/issues/new',
           themeSwitcher: true,
           rtlSwitcher: true,
           webcomponents: true

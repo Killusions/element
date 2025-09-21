@@ -66,7 +66,7 @@ import { SiPhoneNumberInputComponent } from '@siemens/element-ng/phone-number';
     - [@types/google-libphonenumber](https://www.npmjs.com/package/@types/google-libphonenumber)
     - [flag-icons](https://www.npmjs.com/package/flag-icons)
 
-    The versions of the required packages are defined in the peer-dependencies of [element-ng](https://github.com/siemens/element/blob/main/projects/element-ng/package.json). Together with the types package, they are also part of the [package.json of the demo app](https://github.com/siemens/element/blob/main/package.json).
+    The versions of the required packages are defined in the peer-dependencies of [element-ng](https://github.com/Killusions/element/blob/main/projects/element-ng/package.json). Together with the types package, they are also part of the [package.json of the demo app](https://github.com/Killusions/element/blob/main/package.json).
 <!-- markdownlint-enable MD046-->
 
 - Ensure to import the `node_modules/flag-icons/css/flag-icons.css` to the `angular.json` styles configuration as follows:

@@ -2,7 +2,7 @@
 
 The **Element charts** library is a collection of charts based on [ECharts](https://echarts.apache.org/).
 It features a variety of chart styles for different kind of datasets. The source
-code can be found in the [charts-ng folder](https://github.com/siemens/element/blob/main/projects/charts-ng).
+code can be found in the [charts-ng folder](https://github.com/Killusions/element/blob/main/projects/charts-ng).
 
 ## Usage ---
 
@@ -117,7 +117,7 @@ themeSupport.setDefault(themeNameA);
 objects.
 
 For further details to define your own theme see also
-[element.ts](https://github.com/siemens/element/blob/main/projects/charts-ng/src/shared/themes/element.ts)
+[element.ts](https://github.com/Killusions/element/blob/main/projects/charts-ng/src/shared/themes/element.ts)
 as a reference.
 
 ## Resizing ---

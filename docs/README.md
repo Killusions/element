@@ -13,7 +13,7 @@ a vibrant community of contributors.
 
 We provide a rich set of reusable [Angular components](components/index.md)
 which implement the Element design system. The components are developed in the
-[siemens/element](https://github.com/siemens/element) repository on GitHub.
+[siemens/element](https://github.com/Killusions/element) repository on GitHub.
 
 ## Playground
 

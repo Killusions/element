@@ -11,8 +11,8 @@
     "name": "Siemens AG",
     "email": "info@siemens.com"
   },
-  "homepage": "https://github.com/siemens/element",
-  "bugs": "https://github.com/siemens/element/issues/new",
+  "homepage": "https://github.com/Killusions/element",
+  "bugs": "https://github.com/Killusions/element/issues/new",
   "publishConfig": {
     "access": "public"
   },

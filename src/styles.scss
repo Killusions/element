@@ -14,26 +14,16 @@
   $flag-icons-use-square: false
 );
 
-@use '@simpl/brand/assets/fonts/styles/siemens-sans';
-
-@use '@simpl/brand/dist/element-theme-siemens-brand-light' as brand-light;
-@use '@simpl/brand/dist/element-theme-siemens-brand-dark' as brand-dark;
-
 @use '@siemens/element-theme/src/theme' with (
-  $element-theme-default: 'siemens-brand',
+  $element-theme-default: 'element',
   $element-themes: (
-    'siemens-brand',
     'element'
   )
 );
 
-@use '@simpl/element-icons/dist/style/simpl-element-icons';
-
 @use '@siemens/element-theme/src/styles/themes';
 // OpenLayers styling
 @use 'ol/ol.css';
-@include themes.make-theme(brand-light.$tokens, 'siemens-brand');
-@include themes.make-theme(brand-dark.$tokens, 'siemens-brand', true);
 
 app-sample {
   block-size: 100%;
